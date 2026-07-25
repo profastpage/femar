@@ -7,6 +7,8 @@ import { content } from "@/data/content";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import Image from "next/image";
+
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -36,8 +38,8 @@ export function HeroSection() {
         );
 
       // Parallax effect on scroll
-      gsap.to(".hero-bg", {
-        yPercent: 30,
+      gsap.to(".hero-bg-image", {
+        yPercent: 20,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -55,24 +57,34 @@ export function HeroSection() {
     <section
       id="hero"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary pt-20"
+      className="relative min-h-screen flex items-center justify-start overflow-hidden bg-primary pt-20"
     >
-      {/* Abstract Background Gradient */}
-      <div className="hero-bg absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/90 to-background z-10" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[128px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-secondary/10 rounded-full blur-[128px]" />
-        {/* Optional video mask overlay could go here */}
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay" />
+      {/* Image Background */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="hero-bg-image absolute -top-[10%] -left-[5%] w-[110%] h-[120%]">
+          <Image
+            src="/hero-bg.webp"
+            alt="Fondo Logístico de FEMAR"
+            fill
+            priority
+            className="object-cover object-center"
+            quality={100}
+          />
+        </div>
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-20 flex flex-col items-center text-center">
+      {/* Ultra Pro Overlays for Text Readability */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-primary/95 via-primary/80 to-transparent" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-primary via-transparent to-transparent opacity-80" />
+      <div className="absolute inset-0 z-10 bg-[url('/noise.png')] opacity-20 mix-blend-overlay" />
+
+      <div className="container mx-auto px-4 md:px-6 relative z-20 flex flex-col items-start text-left">
         <h1
           ref={titleRef}
-          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-primary-foreground max-w-5xl mb-6 font-heading leading-tight"
+          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-primary-foreground max-w-4xl mb-6 font-heading leading-[1.1]"
           style={{ opacity: 0 }}
         >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">
+          <span className="text-white">
             {content.home.hero.title.split(" ").slice(0, -2).join(" ")}
           </span>{" "}
           <span className="text-accent inline-block">
@@ -82,7 +94,7 @@ export function HeroSection() {
 
         <p
           ref={subtitleRef}
-          className="text-lg md:text-xl lg:text-2xl text-primary-foreground/80 max-w-2xl mb-10 font-medium"
+          className="text-lg md:text-xl lg:text-2xl text-primary-foreground/90 max-w-2xl mb-10 font-medium leading-relaxed"
           style={{ opacity: 0 }}
         >
           {content.home.hero.subtitle}
